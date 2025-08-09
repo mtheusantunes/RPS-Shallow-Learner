@@ -1,7 +1,7 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-package io.github.matheusaantunesf.jankenponplayer;
+package io.github.matheusaantunesf.FrioCalculista;
 
 import io.github.guisso.jankenpon.AbstractPlayer;
 import io.github.guisso.jankenpon.Move;
