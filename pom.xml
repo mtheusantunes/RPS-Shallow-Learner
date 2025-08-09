@@ -21,7 +21,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>
-                                C:\\Users\\mathe\\OneDrive\\Documentos\\NetBeansProjects\\JanKenPonManager\\players
+                                C:\\dev\\projects\\javase\\JanKenPonManager\\players
                             </outputDirectory>
                             <resources>
                                 <resource>
