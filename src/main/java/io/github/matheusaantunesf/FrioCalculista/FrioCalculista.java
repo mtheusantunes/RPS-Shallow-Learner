@@ -16,10 +16,8 @@ import java.util.Comparator;
 public class FrioCalculista
         extends AbstractPlayer {
 
-    Integer rodada = 0, ultimoMovimento = -1,
-            quantidadeRock = 0, quantidadePaper = 0, quantidadeScissors = 0;
+    Integer rodada = 0, ultimoMovimento = -1, penultimoMovimento = -1;
     ArrayList<ArrayList<Move>> amostras = new ArrayList<>();
-    ArrayList<ArrayList<ProporcaoIndice>> proporcoes = new ArrayList<>();
 
     @Override
     public String getDeveloperName() {
@@ -35,6 +33,7 @@ public class FrioCalculista
             rodada = 1;
             amostras.clear();
             ultimoMovimento = 0;
+            penultimoMovimento = -1;
             return Move.ROCK;
         }
 
@@ -42,13 +41,15 @@ public class FrioCalculista
         if (rodada < 32) {
             // Jogada aleatoria
             Integer numeroAleatorio = ThreadLocalRandom.current().nextInt(0, 3);
-            
+
             // Insercao das amostras coletadas
-            while (amostras.size() <= ultimoMovimento) {
-                amostras.add(new ArrayList<>());
+            if (penultimoMovimento > -1) {
+                while (amostras.size() <= penultimoMovimento) {
+                    amostras.add(new ArrayList<>());
+                }
+                amostras.get(penultimoMovimento).add(opponentPreviousMove);
             }
-            amostras.get(ultimoMovimento).add(opponentPreviousMove);
-            
+            penultimoMovimento = ultimoMovimento;
             // Tomada de decisao
             ultimoMovimento = numeroAleatorio;
             if (numeroAleatorio == 0) {
@@ -60,9 +61,11 @@ public class FrioCalculista
             }
         } else {
             // Constroi a tabela de proporcoes dinamica 
-            proporcoes.clear();
+            ArrayList<ArrayList<ProporcaoIndice>> proporcoes = new ArrayList<>();
+            Integer quantidadeRock, quantidadePaper, quantidadeScissors;
+
             amostras.get(ultimoMovimento).add(opponentPreviousMove);
-            
+
             for (int i = 0; i < amostras.size(); i++) {
                 quantidadeRock = quantidadePaper = quantidadeScissors = 0;
                 for (Move movimentoOponente : amostras.get(i)) {
@@ -78,14 +81,20 @@ public class FrioCalculista
                 while (proporcoes.size() < amostras.size()) {
                     proporcoes.add(new ArrayList<>());
                 }
-                proporcoes.get(i).add(new ProporcaoIndice((float) quantidadeRock / amostras.get(i).size(), 0));
-                proporcoes.get(i).add(new ProporcaoIndice((float) quantidadePaper / amostras.get(i).size(), 1));
-                proporcoes.get(i).add(new ProporcaoIndice((float) quantidadeScissors / amostras.get(i).size(), 2));
+                Float proporcaoRock = (float) quantidadeRock / amostras.get(i).size();
+                Float proporcaoPaper = (float) quantidadePaper / amostras.get(i).size();
+                Float proporcaoScissors = (float) quantidadeScissors / amostras.get(i).size();
+
+                proporcoes.get(i).add(new ProporcaoIndice(proporcaoRock, 0));
+                proporcoes.get(i).add(new ProporcaoIndice(proporcaoPaper, 1));
+                proporcoes.get(i).add(new ProporcaoIndice(proporcaoScissors, 2));
+
                 proporcoes.get(i).sort(Comparator.comparing(ProporcaoIndice::proporcao));
             }
-            
-            // Faz a previsao e realiza a jogada com menos chance de ser vencida
+
+            // Faz a previsao da jogada atual menos provavel do oponente
             Integer previsao = proporcoes.get(ultimoMovimento).get(0).indice();
+            // Realiza a jogada que perderia para a menos provavel
             if (previsao == 0) {
                 ultimoMovimento = 2;
                 return Move.SCISSORS;
