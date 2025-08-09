@@ -23,7 +23,7 @@ public class FrioCalculista
 
     @Override
     public String getDeveloperName() {
-        return "Matheus Antunes Freire";
+        return "Matheus Freire";
     }
 
     @Override
