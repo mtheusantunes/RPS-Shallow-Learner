@@ -64,7 +64,7 @@ public class FrioCalculista
             ArrayList<ArrayList<ProporcaoIndice>> proporcoes = new ArrayList<>();
             Integer quantidadeRock, quantidadePaper, quantidadeScissors;
 
-            amostras.get(ultimoMovimento).add(opponentPreviousMove);
+            amostras.get(penultimoMovimento).add(opponentPreviousMove);
 
             for (int i = 0; i < amostras.size(); i++) {
                 quantidadeRock = quantidadePaper = quantidadeScissors = 0;
@@ -91,6 +91,7 @@ public class FrioCalculista
 
                 proporcoes.get(i).sort(Comparator.comparing(ProporcaoIndice::proporcao));
             }
+            penultimoMovimento = ultimoMovimento;
 
             // Faz a previsao da jogada atual menos provavel do oponente
             Integer previsao = proporcoes.get(ultimoMovimento).get(0).indice();
