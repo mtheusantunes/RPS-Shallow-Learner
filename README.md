@@ -6,7 +6,7 @@
 ## English Version
 # Rock Paper Scissors Bot: Shallow Learning Strategy
 
-This repository contains an intelligent Rock Paper Scissors (Jokenpô) player implemented in Java for an academic project. The bot employs a **Traditional Machine Learning (Shallow Model)** approach to predict and counter opponents' moves.
+This repository contains an intelligent Rock Paper Scissors (Jankenpon) player implemented in Java for an academic project. The bot employs a **Traditional Machine Learning (Shallow Model)** approach to predict and counter opponents' moves.
 
 ## 🧠 Strategy
 
